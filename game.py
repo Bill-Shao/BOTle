@@ -17,24 +17,25 @@ def getCombo(guess):
 
 def runGame():
     guess = "crane"
-    guess = guess.strip("\n")
-    guessesLeft = 1
+
+    guessesLeft = 5
 
     while guessesLeft > 0:
+        guess = guess.strip("\n")
+        print("GUESS: " + guess + " LENGTH: " + str(len(guess)))
         comboIndex = comboToIndex(getCombo(guess))
         results = getNewDict(comboIndex,guess)
-
-        print(len(results))
-
         changeDict(results)
-        maxBit = 0
+        print(len(results))
         
-        for word in tqdm(results):
+        
+        maxBit = 0
+        for word in results:
             bit = (probDistribution(word))
             if bit > maxBit:
                 maxBit = bit
                 guess = word
-        print(guess)
+        print("REMAINING WORDS:" + str(results))
 
         guessesLeft-=1
 
