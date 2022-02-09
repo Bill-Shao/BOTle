@@ -7,42 +7,28 @@ import matplotlib.pyplot as plt
 from zmq import PROBE_ROUTER
 from utils import *
 from tqdm import tqdm
+import ast
 
 dictionary = getWords()
 combos = allCombos()
 
-def getProb(combo, word):
-    validOptions = 0 
-    result = []
-    for choice in dictionary:
-        valid = True
-        #COMPARES THE WORD
-        for i in range(5):
-            if combo[i] == "G":
-                if choice[i] != word[i]:
-                    valid = False
-                    break
-            if combo[i] == "Y":
-                if word[i] not in choice or choice[i] == word[i]:
-                    valid = False
-                    break 
-            if combo[i] == "B": #black cuz grey green LMAO
-                if word[i] in choice:
-                    valid = False
-                    break 
-        #ADD OR NOT ADD 
-        if valid:
-            result.append(choice)
-            validOptions +=1 
+def getProb(comboIndex,lines):
+    return lines[comboIndex], len(lines[comboIndex]), len(lines[comboIndex])/len(dictionary) 
 
-    return result,validOptions,validOptions/len(dictionary)
-
+def getNewDict(comboIndex,word):
+    f = open("C:\\Users\\Bill\\Desktop\\wordlebot\\storedDict\\" + word + ".txt")
+    lines = f.read()
+    lines = ast.literal_eval(lines)
+    return lines[comboIndex]
 
 def probDistribution(word):
     counts = []
     probs = []
-    for combo in combos:
-        a = getProb(combo,word)
+    f = open("C:\\Users\\Bill\\Desktop\\wordlebot\\storedDict\\" + word.strip("\n") + ".txt")
+    lines = f.read()
+    lines = ast.literal_eval(lines)
+    for i in range(len(combos)):
+        a = getProb(i,lines)
         counts.append(a[1])
         probs.append(a[2])
     bits = [bitTranslation(prob) for prob in probs]
@@ -51,19 +37,12 @@ def probDistribution(word):
         info += bits[i] * probs[i]
     return info
 
-
 def bitTranslation(prob):
     if prob == 0:
         return 0
     return -math.log(prob,2)
 
-
-bitSig = 0
-bestword = ""
-for word in tqdm(dictionary):
-    bit = probDistribution(word)
-    if bit > bitSig:
-        bitSig = bit
-        bestword = word
-print(bestword)
+def changeDict(newDict):
+    global dictionary
+    dictionary = newDict
 
