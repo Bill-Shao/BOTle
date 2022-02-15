@@ -46,3 +46,4 @@ def changeDict(newDict):
     global dictionary
     dictionary = newDict
 
+print(probDistribution("tares"))

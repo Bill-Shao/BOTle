@@ -16,7 +16,7 @@ def getCombo(guess):
     return combo
 
 def runGame():
-    guess = "crane"
+    guess = "adieu"
 
     guessesLeft = 5
 

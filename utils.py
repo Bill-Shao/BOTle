@@ -68,7 +68,7 @@ def comboToIndex(combo):
     for c in range(len(Combos)):
         if Combos[c] == combo:
             return c
-    print('SOMTHING IS WRONG')
+    print('CANNOT CREATE COMBO FOR: ' + combo)
 
 
 
